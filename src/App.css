@@ -1,0 +1,23 @@
+/* CyberpunkTheme.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
+
+
+body {
+    background-color: #091833;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+}
+
+table {
+    width: 75%; /* Set table width to 75% of its container's width */
+    margin-left: auto; /* Center the table horizontally */
+    margin-right: auto;
+    border-collapse: collapse;
+    border-bottom: 2px solid #133e7c;
+}
+
+th, td {
+    padding: 10px;
+    border: 2px solid #133e7c;
+}
