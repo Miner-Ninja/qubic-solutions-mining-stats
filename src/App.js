@@ -1,75 +1,81 @@
-import React, { useState, useEffect } from 'react';
-import "bootswatch/dist/vapor/bootstrap.min.css";
-import './App.css'; // Import CyberpunkTheme.css instead of App.css
+import React, { useState, useEffect } from 'react'; // Import necessary modules from React library
+import "bootswatch/dist/vapor/bootstrap.min.css"; // Import Bootstrap CSS
+import './App.css'; // Import custom CSS styles (CyberpunkTheme.css can be imported instead of App.css)
 
 function App() {
-  const [minerId, setMinerId] = useState('');
-  const [jsonData, setJsonData] = useState(null);
-  const [sortedDeviceList, setSortedDeviceList] = useState([]);
-  const [sortConfig, setSortConfig] = useState({ key: 'last_iterrate', direction: 'desc' });
-  const [error, setError] = useState('');
+  // Define state variables using the useState hook
+  const [minerId, setMinerId] = useState(''); // State for storing miner ID input value
+  const [jsonData, setJsonData] = useState(null); // State for storing JSON data retrieved from the API
+  const [sortedDeviceList, setSortedDeviceList] = useState([]); // State for storing sorted list of devices
+  const [sortConfig, setSortConfig] = useState({ key: 'last_iterrate', direction: 'desc' }); // State for sorting configuration
+  const [error, setError] = useState(''); // State for handling errors
 
+  // useEffect hook to sort the device list whenever sortConfig or jsonData changes
   useEffect(() => {
-    if (jsonData?.device_list) {
-      sortDeviceList(sortConfig.key, sortConfig.direction);
+    if (jsonData?.device_list) { // Check if jsonData and its device_list property are not null
+      sortDeviceList(sortConfig.key, sortConfig.direction); // Sort the device list based on sortConfig
     }
   }, [sortConfig, jsonData]);
 
+  // Function to handle form submission when entering miner ID
   const handleMinerIdSubmit = async (e) => {
-    e.preventDefault();
-    if (!minerId) {
-      setError("Please enter a miner ID.");
-      return;
+    e.preventDefault(); // Prevent default form submission behavior
+    if (!minerId) { // Check if miner ID input is empty
+      setError("Please enter a miner ID."); // Set error message
+      return; // Exit the function
     }
 
-    const corsProxy = 'http://rp.commando.sh:8080/';
-    const apiUrl = `https://pooltemp.qubic.solutions/info?miner=${minerId}&list=true`;
+    const corsProxy = 'http://rp.commando.sh:8080/'; // Define CORS proxy URL
+    const apiUrl = `https://pooltemp.qubic.solutions/info?miner=${minerId}&list=true`; // Define API URL with miner ID
 
-    setError('');
+    setError(''); // Clear any previous error messages
     try {
-      const response = await fetch(`${corsProxy}${apiUrl}`);
-      if (!response.ok) {
-        if (response.status === 429) {
-          setError("Hey dude, please wait a little bit. There are too many requests. Mouse clicks don't give you any hashrate boost :)");
+      const response = await fetch(`${corsProxy}${apiUrl}`); // Send GET request to the API using fetch
+      if (!response.ok) { // Check if response status is not OK (HTTP status code 200-299)
+        if (response.status === 429) { // Check if response status is 429 (Too Many Requests)
+          setError("Hey dude, please wait a little bit. There are too many requests. Mouse clicks don't give you any hashrate boost :)"); // Set error message
         } else {
-          setError(`HTTP error! Status: ${response.status}`);
+          setError(`HTTP error! Status: ${response.status}`); // Set generic HTTP error message
         }
-        setJsonData(null);
-        return;
+        setJsonData(null); // Reset jsonData state to null
+        return; // Exit the function
       }
-      const data = await response.json();
-      setJsonData(data);
-      sortDeviceList('last_iterrate', 'desc', data.device_list);
+      const data = await response.json(); // Parse response body as JSON
+      setJsonData(data); // Update jsonData state with the fetched data
+      sortDeviceList('last_iterrate', 'desc', data.device_list); // Sort the device list based on 'last_iterrate' key descendingly
     } catch (error) {
-      console.error("Failed to fetch data:", error);
-      setError("An error occurred while fetching data.");
-      setJsonData(null);
+      console.error("Failed to fetch data:", error); // Log error to console
+      setError("An error occurred while fetching data."); // Set error message
+      setJsonData(null); // Reset jsonData state to null
     }
   };
 
+  // Function to sort the device list based on the provided key and direction
   const sortDeviceList = (key, direction, deviceList = jsonData?.device_list) => {
-    if (!deviceList) return;
+    if (!deviceList) return; // Exit the function if deviceList is null or undefined
     const sortedList = [...deviceList].sort((a, b) => {
-      if (a[key] < b[key]) return direction === 'asc' ? -1 : 1;
-      if (a[key] > b[key]) return direction === 'asc' ? 1 : -1;
-      return 0;
+      if (a[key] < b[key]) return direction === 'asc' ? -1 : 1; // Compare values based on direction
+      if (a[key] > b[key]) return direction === 'asc' ? 1 : -1; // Compare values based on direction
+      return 0; // Return 0 if values are equal
     });
-    setSortedDeviceList(sortedList);
+    setSortedDeviceList(sortedList); // Update sortedDeviceList state with the sorted list
   };
 
+  // Function to toggle sorting direction for a given key
   const toggleSort = (key) => {
-    const isAsc = sortConfig.key === key && sortConfig.direction === 'asc';
-    setSortConfig({
+    const isAsc = sortConfig.key === key && sortConfig.direction === 'asc'; // Check if current sortConfig is ascending
+    setSortConfig({ // Update sortConfig state
       key,
-      direction: isAsc ? 'desc' : 'asc',
+      direction: isAsc ? 'desc' : 'asc', // Toggle sorting direction
     });
   };
 
-  // Function to round up a number to two digits after the comma
+  // Function to round a number to two digits after the decimal point
   const roundToTwoDigits = (num) => {
-    return Number(num.toFixed(2));
+    return Number(num.toFixed(2)); // Convert number to string with fixed two digits after the decimal point and convert it back to number
   };
 
+  // JSX code for rendering UI components
   return (
     <div className="container mt-5">
       <h1 className="text-light mb-2">Pooltemp.Qubic.Solutions - Mining statistics page</h1>
