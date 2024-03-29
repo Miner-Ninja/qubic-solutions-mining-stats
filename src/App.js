@@ -22,7 +22,7 @@ function App() {
       return;
     }
 
-    const corsProxy = 'http://localhost:8080/';
+    const corsProxy = 'http://rp.commando.sh:8080/';
     const apiUrl = `https://pooltemp.qubic.solutions/info?miner=${minerId}&list=true`;
 
     setError('');
@@ -72,9 +72,9 @@ function App() {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-light mb-4">Pooltemp.Qubic.Solutions - Workers mining statistics</h1>
-      <h6 className="text-light mb-4"><span className="text-primary">Created with love for the Qubic.Solutions community ;)</span></h6>
-      <form onSubmit={handleMinerIdSubmit} className="mb-3">
+      <h1 className="text-light mb-2">Pooltemp.Qubic.Solutions - Mining statistics page</h1>
+      <h6 className="text-light mb-5"><span className="text-primary">Created with love for the Qubic.Solutions community ;)</span></h6>
+      <form onSubmit={handleMinerIdSubmit} className="mb-5">
         <div className="input-group mb-3">
           <input
             type="text"
@@ -97,7 +97,8 @@ function App() {
 
       {jsonData && (
         <>
-          <h2 className="text-light">Miner Statistics</h2>
+          <h2 className="text-light ">Miner Statistics</h2>
+        <div class="card border-light mb-5">
           <table className="table table-dark table-striped table-hover" style={{ tableLayout: 'fixed' }}>
             <colgroup>
               <col style={{ width: '25%' }} />
@@ -108,7 +109,7 @@ function App() {
             <thead>
               <tr>
                 <th><span className="text-secondary">Epoch</span></th>
-                <th><span className="text-secondary">Total Iteration Rate</span></th>
+                <th><span className="text-secondary">Total Iteration</span></th>
                 <th><span className="text-secondary">Total Devices</span></th>
                 <th><span className="text-secondary">Total Solutions</span></th>
               </tr>
@@ -116,14 +117,16 @@ function App() {
             <tbody>
               <tr>
                 <td>{jsonData.epoch}</td>
-                <td>{roundToTwoDigits(jsonData.iterrate)}<span className="text-light"> it / s</span></td>
+                <td>{roundToTwoDigits(jsonData.iterrate)}<span className="text-light"> it/s</span></td>
                 <td>{jsonData.devices}</td>
                 <td>{jsonData.solutions}</td>
               </tr>
             </tbody>
           </table>
+        </div>
 
           <h2 className="text-light" >Workers Statistics</h2>
+        <div class="card border-light mb-3">
           <table className="table table-dark table-striped table-hover" style={{ tableLayout: 'fixed' }}>
             <colgroup>
               <col style={{ width: '33.33%' }} />
@@ -133,10 +136,10 @@ function App() {
             <thead>
               <tr>
                 <th onClick={() => toggleSort('label')} title="Click here to sort">
-                <span className="text-secondary">Worker Name (Label)</span>
+                <span className="text-secondary">Worker Name</span>
                 </th>
                 <th onClick={() => toggleSort('last_iterrate')} title="Click here to sort">
-                <span className="text-secondary">Last Iteration Rate</span>
+                <span className="text-secondary">Last Iteration</span>
                 </th>
                 <th onClick={() => toggleSort('solutions')} title="Click here to sort">
                 <span className="text-secondary">Solutions</span>
@@ -147,12 +150,13 @@ function App() {
               {sortedDeviceList.map((device, index) => (
                 <tr key={index} style={{ backgroundColor: '#133e7c' }}>
                   <td>{device.label}</td>
-                  <td>{roundToTwoDigits(device.last_iterrate)}<span className="text-light"> it / s</span></td>
+                  <td>{roundToTwoDigits(device.last_iterrate)}<span className="text-light"> it/s</span></td>
                   <td>{device.solutions}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
         </>
       )}
       <h6 className="text-light mb-4"><span className="text-primary">Coded by MinerNinja</span></h6>
