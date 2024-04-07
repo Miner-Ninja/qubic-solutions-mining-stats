@@ -25,12 +25,11 @@ function App() {
       return; // Exit the function
     }
 
-    const corsProxy = 'http://rp.commando.sh:8080/'; // Define CORS proxy URL
-    const apiUrl = `https://pooltemp.qubic.solutions/info?miner=${minerId}&list=true`; // Define API URL with miner ID
+    const apiUrl = `https://stats.commando.sh/TsW8bAP2NE00ka9UuCNh/?miner=${minerId}&list=true`; // Define API URL with miner ID
 
     setError(''); // Clear any previous error messages
     try {
-      const response = await fetch(`${corsProxy}${apiUrl}`); // Send GET request to the API using fetch
+      const response = await fetch(`${apiUrl}`); // Send GET request to the API using fetch
       if (!response.ok) { // Check if response status is not OK (HTTP status code 200-299)
         if (response.status === 429) { // Check if response status is 429 (Too Many Requests)
           setError("Hey dude, please wait a little bit. There are too many requests. Mouse clicks don't give you any hashrate boost :)"); // Set error message
