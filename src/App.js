@@ -1,172 +1,326 @@
-import React, { useState, useEffect } from 'react'; // Import necessary modules from React library
-import "bootswatch/dist/vapor/bootstrap.min.css"; // Import Bootstrap CSS
-import './App.css'; // Import custom CSS styles (CyberpunkTheme.css can be imported instead of App.css)
+import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
+import "bootswatch/dist/vapor/bootstrap.min.css";
+import './App.css';
 
 function App() {
-  // Define state variables using the useState hook
-  const [minerId, setMinerId] = useState(''); // State for storing miner ID input value
-  const [jsonData, setJsonData] = useState(null); // State for storing JSON data retrieved from the API
-  const [sortedDeviceList, setSortedDeviceList] = useState([]); // State for storing sorted list of devices
-  const [sortConfig, setSortConfig] = useState({ key: 'last_iterrate', direction: 'desc' }); // State for sorting configuration
-  const [error, setError] = useState(''); // State for handling errors
+  const [minerId, setMinerId] = useState('');
+  const [jsonData1, setjsonData1] = useState(null);
+  const [jsonData2, setJsonData2] = useState(null);
+  const [sortedDeviceList, setSortedDeviceList] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ key: 'last_iterrate', direction: 'desc' });
+  const [error, setError] = useState('');
+  const [hideMinerAddress, setHideMinerAddress] = useState(false);
+  const [hideWorkerName, setHideWorkerName] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
+  const [api1TimeStamp, setApi1TimeStamp] = useState('');
+  const [api2TimeStamp, setApi2TimeStamp] = useState('');
+  const [rememberAddress, setRememberAddress] = useState(false);
 
-  // useEffect hook to sort the device list whenever sortConfig or jsonData changes
   useEffect(() => {
-    if (jsonData?.device_list) { // Check if jsonData and its device_list property are not null
-      sortDeviceList(sortConfig.key, sortConfig.direction); // Sort the device list based on sortConfig
-    }
-  }, [sortConfig, jsonData]);
+    const storedMinerId = sessionStorage.getItem('minerId');
+    const storedRememberAddress = sessionStorage.getItem('rememberAddress');
+    const storedHideMinerAddress = sessionStorage.getItem('hideMinerAddress');
+    const storedHideWorkerName = sessionStorage.getItem('hideWorkerName');
 
-  // Function to handle form submission when entering miner ID
-  const handleMinerIdSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
-    if (!minerId) { // Check if miner ID input is empty
-      setError("Please enter a miner ID."); // Set error message
-      return; // Exit the function
+    if (storedMinerId && storedRememberAddress === 'true') {
+      setMinerId(storedMinerId);
+      setRememberAddress(true);
     }
 
-    const apiUrl = `https://stats.commando.sh/TsW8bAP2NE00ka9UuCNh/?miner=${minerId}&list=true`; // Define API URL with miner ID
+    if (storedHideMinerAddress) {
+      setHideMinerAddress(true);
+    }
 
-    setError(''); // Clear any previous error messages
-    try {
-      const response = await fetch(`${apiUrl}`); // Send GET request to the API using fetch
-      if (!response.ok) { // Check if response status is not OK (HTTP status code 200-299)
-        if (response.status === 429) { // Check if response status is 429 (Too Many Requests)
-          setError("Hey dude, please wait a little bit. There are too many requests. Mouse clicks don't give you any hashrate boost :)"); // Set error message
-        } else {
-          setError(`HTTP error! Status: ${response.status}`); // Set generic HTTP error message
+    if (storedHideWorkerName) {
+      setHideWorkerName(true);
+    }
+
+    const apiUrl1 = `/TsW8bAP2NE00ka9UuCNh/`;
+
+    const fetchData = async () => {
+      try {
+        const response1 = await fetch(apiUrl1);
+        if (!response1.ok) {
+          throw new Error("Sorry, we can't load POOL DATA from the pool server. There are too many requests to the server. Please wait and try again!");
         }
-        setJsonData(null); // Reset jsonData state to null
-        return; // Exit the function
+        const data1 = await response1.json();
+        setjsonData1(data1);
+        setApi1TimeStamp(getTimeStamp());
+      } catch (error) {
+        setError(error.message);
       }
-      const data = await response.json(); // Parse response body as JSON
-      setJsonData(data); // Update jsonData state with the fetched data
-      sortDeviceList('last_iterrate', 'desc', data.device_list); // Sort the device list based on 'last_iterrate' key descendingly
-    } catch (error) {
-      console.error("Failed to fetch data:", error); // Log error to console
-      setError("An error occurred while fetching data."); // Set error message
-      setJsonData(null); // Reset jsonData state to null
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (rememberAddress) {
+      sessionStorage.setItem('minerId', minerId);
+      sessionStorage.setItem('rememberAddress', 'true');
+    } else {
+      sessionStorage.removeItem('minerId');
+      sessionStorage.removeItem('rememberAddress');
     }
+  }, [rememberAddress, minerId]);
+
+  useEffect(() => {
+    if (hideMinerAddress) {
+      sessionStorage.setItem('hideMinerAddress', 'true');
+    } else {
+      sessionStorage.removeItem('hideMinerAddress');
+    }
+  }, [hideMinerAddress]);
+
+  useEffect(() => {
+    if (hideWorkerName) {
+      sessionStorage.setItem('hideWorkerName', 'true');
+    } else {
+      sessionStorage.removeItem('hideWorkerName');
+    }
+  }, [hideWorkerName]);
+
+  const handleMinerIdSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!minerId) {
+      setError("Empty wallet address. Please enter the correct wallet address and try again!");
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9]{60}$/.test(minerId)) {
+      setError("Wrong wallet address. Please enter the correct wallet address and try again!");
+      return;
+    }
+
+    const apiUrl2 = `/TsW8bAP2NE00ka9UuCNh/?miner=${minerId}&list=true`;
+
+    setError('');
+    setShowLoading(true);
+
+    setTimeout(async () => {
+      try {
+        const response2 = await fetch(apiUrl2);
+        if (!response2.ok) {
+          throw new Error("Sorry, we can't load MINER DATA from the pool server. There are too many requests to the server. Please wait and try again!");
+        }
+
+        const data2 = await response2.json();
+        setJsonData2(data2);
+        sortDeviceList(sortConfig.key, sortConfig.direction, data2.device_list);
+        setApi2TimeStamp(getTimeStamp());
+      } catch (error) {
+        setError(error.message);
+        setJsonData2(null);
+      } finally {
+        setShowLoading(false);
+      }
+    }, 11000);
   };
 
-  // Function to sort the device list based on the provided key and direction
-  const sortDeviceList = (key, direction, deviceList = jsonData?.device_list) => {
-    if (!deviceList) return; // Exit the function if deviceList is null or undefined
+  const sortDeviceList = (key, direction, deviceList = jsonData2?.device_list) => {
+    if (!deviceList) return;
     const sortedList = [...deviceList].sort((a, b) => {
-      if (a[key] < b[key]) return direction === 'asc' ? -1 : 1; // Compare values based on direction
-      if (a[key] > b[key]) return direction === 'asc' ? 1 : -1; // Compare values based on direction
-      return 0; // Return 0 if values are equal
+      if (a[key] < b[key]) return direction === 'asc' ? -1 : 1;
+      if (a[key] > b[key]) return direction === 'asc' ? 1 : -1;
+      return 0;
     });
-    setSortedDeviceList(sortedList); // Update sortedDeviceList state with the sorted list
+    setSortedDeviceList(sortedList);
   };
 
-  // Function to toggle sorting direction for a given key
   const toggleSort = (key) => {
-    const isAsc = sortConfig.key === key && sortConfig.direction === 'asc'; // Check if current sortConfig is ascending
-    setSortConfig({ // Update sortConfig state
-      key,
-      direction: isAsc ? 'desc' : 'asc', // Toggle sorting direction
-    });
+    const direction = key === sortConfig.key ? (sortConfig.direction === 'asc' ? 'desc' : 'asc') : 'asc';
+    setSortConfig({ key, direction });
+    sortDeviceList(key, direction);
   };
 
-  // Function to round a number to two digits after the decimal point
   const roundToTwoDigits = (num) => {
-    return Number(num.toFixed(2)); // Convert number to string with fixed two digits after the decimal point and convert it back to number
+    return Number(num.toFixed(2));
   };
 
-  // JSX code for rendering UI components
+const getTimeStamp = () => {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const year = now.getFullYear();
+
+  return `${hours}:${minutes}:${seconds} ${day}-${month}-${year}`;
+};
+
+
   return (
-    <div className="container mt-5">
-      <h1 className="text-light mb-2">Pooltemp.Qubic.Solutions - Mining statistics page</h1>
-      <h6 className="text-light mb-5"><span className="text-primary">Created with love for the Qubic.Solutions community ;)</span></h6>
-      <form onSubmit={handleMinerIdSubmit} className="mb-5">
+    <div className="container mt-5 fade-in">
+      <Helmet>
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Qubic.Commando.sh - Mining Stats for Qubic.Solutions Pool</title>
+        <meta name="description" content="Get real-time mining statistics for Qubic.Solutions pool. Check epoch, pool iteration, devices, and solutions." />
+        <meta name="keywords" content="mining stats, Qubic Solutions, pool statistics, epoch, pool iteration, devices, solutions" />
+        <meta name="author" content="MinerNinja" />
+      </Helmet>
+
+      <h6 className="alert alert-dismissible alert-info fade-in mb-1">We apologize, the project is in a highly developmental stage, so there may be some errors</h6>
+      <h6 className="alert alert-dismissible alert-primary fade-in mb-4">Mining statistics can be updated once every 180 seconds</h6>
+      <h1 className="text-light mb-2" id="title">Qubic.Commando.sh - Mining stats for Qubic.Solutions pool</h1>
+      <h6 className="text-light mb-4"><span className="text-primary">Created with love for the Qubic.Solutions community ;)</span></h6>
+
+      <div className="col-md-12 d-flex justify-content-between">
+        <div className="form-check form-switch fade-in mb-0">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="toggleSwitchMinerAddress"
+              checked={hideMinerAddress}
+              onChange={() => setHideMinerAddress(!hideMinerAddress)}
+            />
+            <label className="form-check-label" htmlFor="toggleSwitchMinerAddress" style={{ fontSize: '0.8rem', fontWeight: 'normal' }}>Hide Address</label>
+        </div>
+          <div className="form-check form-switch fade-in mb-2">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="toggleSwitchRememberAddress"
+              checked={rememberAddress}
+              onChange={() => setRememberAddress(!rememberAddress)}
+            />
+            <label className="form-check-label" htmlFor="toggleSwitchRememberAddress" style={{ fontSize: '0.8rem', fontWeight: 'normal' }}>Remember Address</label>
+        </div>
+      </div>
+
+      <form onSubmit={handleMinerIdSubmit} className="fade-in mb-4">
         <div className="input-group mb-3">
           <input
             type="text"
-            className="form-control"
+            className="form-control form-control-lg"
             value={minerId}
             onChange={(e) => setMinerId(e.target.value)}
-            placeholder="Enter Miner ID"
+            placeholder="Enter Your Qubic Wallet Address"
+            style={{ filter: hideMinerAddress ? 'blur(4px)' : 'none' }}
           />
-          <button className="btn btn-primary" className="btn btn-secondary" type="submit">Load Miner Data</button>
+          <button className="btn btn-secondary" type="submit">Load Miner Stats</button>
         </div>
       </form>
 
       {error && (
-        <div className="alert alert-dismissible alert-danger" role="alert">
-          <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
-          <h4 className="alert-heading">Warning!</h4>
-          <p className="mb-0">{error}</p>
+        <div className="alert alert-danger fade-in" role="alert">
+          {error}
         </div>
       )}
 
-      {jsonData && (
+      {jsonData1 && (
         <>
-          <h2 className="text-light ">Miner Statistics</h2>
-        <div class="card border-light mb-5">
-          <table className="table table-dark table-striped table-hover" style={{ tableLayout: 'fixed' }}>
-            <colgroup>
-              <col style={{ width: '25%' }} />
-              <col style={{ width: '25%' }} />
-              <col style={{ width: '25%' }} />
-              <col style={{ width: '25%' }} />
-            </colgroup>
-            <thead>
-              <tr>
-                <th><span className="text-secondary">Epoch</span></th>
-                <th><span className="text-secondary">Total Iteration</span></th>
-                <th><span className="text-secondary">Total Devices</span></th>
-                <th><span className="text-secondary">Total Solutions</span></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{jsonData.epoch}</td>
-                <td>{roundToTwoDigits(jsonData.iterrate)}<span className="text-light"> it/s</span></td>
-                <td>{jsonData.devices}</td>
-                <td>{jsonData.solutions}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-          <h2 className="text-light" >Workers Statistics</h2>
-        <div class="card border-light mb-3">
-          <table className="table table-dark table-striped table-hover" style={{ tableLayout: 'fixed' }}>
-            <colgroup>
-              <col style={{ width: '33.33%' }} />
-              <col style={{ width: '33.33%' }} />
-              <col style={{ width: '33.33%' }} />
-            </colgroup>
-            <thead>
-              <tr>
-                <th onClick={() => toggleSort('label')} title="Click here to sort">
-                <span className="text-secondary">Worker Name</span>
-                </th>
-                <th onClick={() => toggleSort('last_iterrate')} title="Click here to sort">
-                <span className="text-secondary">Last Iteration</span>
-                </th>
-                <th onClick={() => toggleSort('solutions')} title="Click here to sort">
-                <span className="text-secondary">Solutions</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedDeviceList.map((device, index) => (
-                <tr key={index} style={{ backgroundColor: '#133e7c' }}>
-                  <td>{device.label}</td>
-                  <td>{roundToTwoDigits(device.last_iterrate)}<span className="text-light"> it/s</span></td>
-                  <td>{device.solutions}</td>
+          <h2 className="text-light fade-in">Pool Statistics</h2>
+          <p className="fade-in" style={{ color: '#6c757d', fontSize: '0.8rem', fontWeight: 'normal' }}>Data loaded at: {api1TimeStamp}</p>
+          
+          <div className="card border-light mb-5 fade-in">
+            <table className="table table-dark table-striped table-hover mb-0 w-full" style={{ tableLayout: 'fixed' }}>
+              <thead>
+                <tr>
+                  <th className="w-1/4"><span className="text-secondary">Epoch</span></th>
+                  <th className="w-1/4"><span className="text-secondary">Pool Iteration</span></th>
+                  <th className="w-1/4"><span className="text-secondary">Pool Devices</span></th>
+                  <th className="w-1/4"><span className="text-secondary">Pool Solutions</span></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="w-1/4">{jsonData1.epoch}</td>
+                  <td className="w-1/4">{roundToTwoDigits((jsonData1.iterrate)/10000000)}<span className="text-light"> Mit/s</span></td>
+                  <td className="w-1/4">{jsonData1.devices}</td>
+                  <td className="w-1/4">{jsonData1.solutions}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </>
       )}
-      <h6 className="text-light mb-4"><span className="text-primary">Coded by MinerNinja</span></h6>
+
+      {showLoading && (
+        <div className="progress mb-4 fade-in">
+          <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style={{ width: '100%' }}>Loading Data ...</div>
+        </div>
+      )}
+
+
+      {jsonData2 && (
+        <>
+          <h2 className="text-light fade-in">Miner Statistics</h2>
+          <p className="fade-in" style={{ color: '#6c757d', fontSize: '0.8rem', fontWeight: 'normal' }}>Data loaded at: {api2TimeStamp}</p>
+          <div className="card border-light mb-5 fade-in">
+            <table className="table table-dark table-striped table-hover mb-0 w-full" style={{ tableLayout: 'fixed' }}>
+              <colgroup>
+                <col className="w-1/3" />
+                <col className="w-1/3" />
+                <col className="w-1/3" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th className="w-1/3"><span className="text-secondary">Total Iteration</span></th>
+                  <th className="w-1/3"><span className="text-secondary">Total Devices</span></th>
+                  <th className="w-1/3"><span className="text-secondary">Total Solutions</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="w-1/3">{roundToTwoDigits(jsonData2.iterrate)}<span className="text-light"> it/s</span></td>
+                  <td className="w-1/3">{jsonData2.devices}</td>
+                  <td className="w-1/3">{jsonData2.solutions}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 className="text-light fade-in">Workers Statistics</h2>
+          <p className="fade-in mb-0" style={{ color: '#6c757d', fontSize: '0.8rem', fontWeight: 'normal' }}>Data loaded at: {api2TimeStamp}</p>
+          <div className="form-check form-switch mb-2 fade-in">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="toggleSwitchWorkerName"
+              checked={hideWorkerName}
+              onChange={() => setHideWorkerName(!hideWorkerName)}
+            />
+            <label className="form-check-label fade-in" htmlFor="toggleSwitchWorkerName" style={{ fontSize: '0.8rem', fontWeight: 'normal' }}>Hide Worker Name</label>
+          </div>
+          <div className="card border-light mb-3 fade-in">
+            <table className="table table-dark table-striped table-hover mb-0" style={{ tableLayout: 'fixed' }}>
+              <thead>
+                <tr>
+                  <th className="w-1/3" onClick={() => toggleSort('label')} title="Click here to sort">
+                    <span className="text-secondary">Worker Name</span>
+                  </th>
+                  <th className="w-1/3" onClick={() => toggleSort('last_iterrate')} title="Click here to sort">
+                    <span className="text-secondary">Last Iteration</span>
+                  </th>
+                  <th className="w-1/3" onClick={() => toggleSort('solutions')} title="Click here to sort">
+                    <span className="text-secondary">Solutions</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedDeviceList.map((device, index) => (
+                  <tr key={index} style={{ backgroundColor: '#133e7c' }}>
+                    <td style={{ filter: hideWorkerName ? 'blur(4px)' : 'none' }}>
+                      {device.label}
+                    </td>
+                    <td>{roundToTwoDigits(device.last_iterrate)}<span className="text-light"> it/s</span></td>
+                    <td>{device.solutions}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+
+      <h6 className="text-light mb-4 fade-in"><span className="text-primary">Coded by MinerNinja</span></h6>
     </div>
   );
 }
 
 export default App;
+
