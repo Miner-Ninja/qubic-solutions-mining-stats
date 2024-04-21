@@ -148,7 +148,7 @@ const getTimeStamp = () => {
   const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
   const year = now.getFullYear();
 
-  return `${hours}:${minutes}:${seconds} ${day}-${month}-${year}`;
+  return `${hours}:${minutes}:${seconds} / ${day}-${month}-${year}`;
 };
 
 
