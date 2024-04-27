@@ -139,17 +139,17 @@ function App() {
     return Number(num.toFixed(2));
   };
 
-const getTimeStamp = () => {
-  const now = new Date();
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const seconds = String(now.getSeconds()).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-  const year = now.getFullYear();
+  const getTimeStamp = () => {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = now.getFullYear();
 
-  return `${hours}:${minutes}:${seconds} / ${day}-${month}-${year}`;
-};
+    return `${hours}:${minutes}:${seconds} / ${day}-${month}-${year}`;
+  };
 
 
   return (
@@ -170,24 +170,24 @@ const getTimeStamp = () => {
 
       <div className="col-md-12 d-flex justify-content-between">
         <div className="form-check form-switch fade-in mb-0">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="toggleSwitchMinerAddress"
-              checked={hideMinerAddress}
-              onChange={() => setHideMinerAddress(!hideMinerAddress)}
-            />
-            <label className="form-check-label" htmlFor="toggleSwitchMinerAddress" style={{ fontSize: '0.8rem', fontWeight: 'normal' }}>Hide Address</label>
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="toggleSwitchMinerAddress"
+            checked={hideMinerAddress}
+            onChange={() => setHideMinerAddress(!hideMinerAddress)}
+          />
+          <label className="form-check-label" htmlFor="toggleSwitchMinerAddress" style={{ fontSize: '0.8rem', fontWeight: 'normal' }}>Hide Address</label>
         </div>
-          <div className="form-check form-switch fade-in mb-2">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="toggleSwitchRememberAddress"
-              checked={rememberAddress}
-              onChange={() => setRememberAddress(!rememberAddress)}
-            />
-            <label className="form-check-label" htmlFor="toggleSwitchRememberAddress" style={{ fontSize: '0.8rem', fontWeight: 'normal' }}>Remember Address</label>
+        <div className="form-check form-switch fade-in mb-2">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="toggleSwitchRememberAddress"
+            checked={rememberAddress}
+            onChange={() => setRememberAddress(!rememberAddress)}
+          />
+          <label className="form-check-label" htmlFor="toggleSwitchRememberAddress" style={{ fontSize: '0.8rem', fontWeight: 'normal' }}>Remember Address</label>
         </div>
       </div>
 
@@ -215,7 +215,7 @@ const getTimeStamp = () => {
         <>
           <h2 className="text-light fade-in">Pool Statistics</h2>
           <p className="fade-in" style={{ color: '#6c757d', fontSize: '0.8rem', fontWeight: 'normal' }}>Data loaded at: {api1TimeStamp}</p>
-          
+
           <div className="card border-light mb-5 fade-in">
             <table className="table table-dark table-striped table-hover mb-0 w-full" style={{ tableLayout: 'fixed' }}>
               <thead>
@@ -229,7 +229,7 @@ const getTimeStamp = () => {
               <tbody>
                 <tr>
                   <td className="w-1/4">{jsonData1.epoch}</td>
-                  <td className="w-1/4">{roundToTwoDigits((jsonData1.iterrate)/10000000)}<span className="text-light"> Mit/s</span></td>
+                  <td className="w-1/4">{roundToTwoDigits((jsonData1.iterrate) / 1000000)}<span className="text-light"> Mit/s</span></td>
                   <td className="w-1/4">{jsonData1.devices}</td>
                   <td className="w-1/4">{jsonData1.solutions}</td>
                 </tr>
