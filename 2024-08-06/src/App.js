@@ -220,22 +220,18 @@ function App() {
             <table className="table table-dark table-striped table-hover mb-0 w-full" style={{ tableLayout: 'fixed' }}>
               <thead>
                 <tr>
-                  <th className="w-1/6"><span className="text-secondary">Epoch</span></th>
-                  <th className="w-1/6"><span className="text-secondary">Pool Iteration</span></th>
-                  <th className="w-1/6"><span className="text-secondary">Pool Devices</span></th>
-                  <th className="w-1/6"><span className="text-secondary">Pool Shares</span></th>
-                  <th className="w-1/6"><span className="text-secondary">Pool Solutions</span></th>
-                  <th className="w-1/6"><span className="text-secondary">Min. Miner ver.</span></th>
+                  <th className="w-1/4"><span className="text-secondary">Epoch</span></th>
+                  <th className="w-1/4"><span className="text-secondary">Pool Iteration</span></th>
+                  <th className="w-1/4"><span className="text-secondary">Pool Devices</span></th>
+                  <th className="w-1/4"><span className="text-secondary">Pool Solutions</span></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="w-1/6">{jsonData1.epoch}</td>
-                  <td className="w-1/6">{roundToTwoDigits((jsonData1.iterrate) / 1000)}<span className="text-light"> Kit/s</span></td>
-                  <td className="w-1/6">{jsonData1.devices}</td>
-                  <td className="w-1/6">{jsonData1.shares}</td>
-                  <td className="w-1/6">{jsonData1.solutions}</td>
-                  <td className="w-1/6">{jsonData1.min_miner_version}</td>
+                  <td className="w-1/4">{jsonData1.epoch}</td>
+                  <td className="w-1/4">{roundToTwoDigits((jsonData1.iterrate) / 1000)}<span className="text-light"> Kit/s</span></td>
+                  <td className="w-1/4">{jsonData1.devices}</td>
+                  <td className="w-1/4">{jsonData1.solutions}</td>
                 </tr>
               </tbody>
             </table>
@@ -257,25 +253,22 @@ function App() {
           <div className="card border-light mb-5 fade-in">
             <table className="table table-dark table-striped table-hover mb-0 w-full" style={{ tableLayout: 'fixed' }}>
               <colgroup>
-                <col className="w-1/4" />
-                <col className="w-1/4" />
-                <col className="w-1/4" />
-                <col className="w-1/4" />
+                <col className="w-1/3" />
+                <col className="w-1/3" />
+                <col className="w-1/3" />
               </colgroup>
               <thead>
                 <tr>
-                  <th className="w-1/4"><span className="text-secondary">Total Iteration</span></th>
-                  <th className="w-1/4"><span className="text-secondary">Total Devices</span></th>
-                  <th className="w-1/4"><span className="text-secondary">Total Shares</span></th>
-                  <th className="w-1/4"><span className="text-secondary">Total Solutions</span></th>
+                  <th className="w-1/3"><span className="text-secondary">Total Iteration</span></th>
+                  <th className="w-1/3"><span className="text-secondary">Total Devices</span></th>
+                  <th className="w-1/3"><span className="text-secondary">Total Solutions</span></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="w-1/4">{roundToTwoDigits(jsonData2.iterrate)}<span className="text-light"> it/s</span></td>
-                  <td className="w-1/4">{jsonData2.devices}</td>
-                  <td className="w-1/4">{jsonData2.shares}</td>
-                  <td className="w-1/4">{jsonData2.solutions}</td>
+                  <td className="w-1/3">{roundToTwoDigits(jsonData2.iterrate)}<span className="text-light"> it/s</span></td>
+                  <td className="w-1/3">{jsonData2.devices}</td>
+                  <td className="w-1/3">{jsonData2.solutions}</td>
                 </tr>
               </tbody>
             </table>
@@ -297,31 +290,25 @@ function App() {
             <table className="table table-dark table-striped table-hover mb-0" style={{ tableLayout: 'fixed' }}>
               <thead>
                 <tr>
-                  <th className="w-1/4" onClick={() => toggleSort('label')} title="Click here to sort">
+                  <th className="w-1/3" onClick={() => toggleSort('label')} title="Click here to sort">
                     <span className="text-secondary">Worker Name</span>
                   </th>
-                  <th className="w-1/4" onClick={() => toggleSort('last_iterrate')} title="Click here to sort">
+                  <th className="w-1/3" onClick={() => toggleSort('last_iterrate')} title="Click here to sort">
                     <span className="text-secondary">Last Iteration</span>
                   </th>
-                  <th className="w-1/4" onClick={() => toggleSort('shares')} title="Click here to sort">
-                    <span className="text-secondary">Shares</span>
-                  </th>
-                  {/* <th className="w-1/5" onClick={() => toggleSort('solutions')} title="Click here to sort">
+                  <th className="w-1/3" onClick={() => toggleSort('solutions')} title="Click here to sort">
                     <span className="text-secondary">Solutions</span>
-                  </th> */}
-                  <th className="w-1/4" onClick={() => toggleSort('version')} title="Click here to sort">
-                    <span className="text-secondary">Miner version</span>
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {sortedDeviceList.map((device, index) => (
                   <tr key={index} style={{ backgroundColor: '#133e7c' }}>
-                    <td style={{ filter: hideWorkerName ? 'blur(4px)' : 'none' }}>{device.label}</td>
+                    <td style={{ filter: hideWorkerName ? 'blur(4px)' : 'none' }}>
+                      {device.label}
+                    </td>
                     <td>{roundToTwoDigits(device.last_iterrate)}<span className="text-light"> it/s</span></td>
-                    <td>{device.shares}</td>
-                    {/* <td>{device.solutions}</td> */}
-                    <td>{device.version}</td>
+                    <td>{device.solutions}</td>
                   </tr>
                 ))}
               </tbody>
