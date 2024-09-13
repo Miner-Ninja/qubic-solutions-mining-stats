@@ -162,11 +162,11 @@ function App() {
         <meta name="keywords" content="mining stats, Qubic Solutions, pool statistics, epoch, pool iteration, devices, solutions" />
         <meta name="author" content="MinerNinja" />
       </Helmet>
+      <h6 className="text-light mb-1"><span className="fade-in text-primary">Feel free to donate for webpage development and support: <br/>Qubic wallet: AAIGFEWABOFCNDCFJUOMMAYMVNUCLQWMYQQIDYYFSFQMJTRAIXJEDTTEJHDI</span></h6>
 
-      <h6 className="alert alert-dismissible alert-info fade-in mb-1">Feel free to donate to support the stats page: <br/>Qubic wallet: AAIGFEWABOFCNDCFJUOMMAYMVNUCLQWMYQQIDYYFSFQMJTRAIXJEDTTEJHDI<br/>Happy mining, and may the hash-force be with you ;)</h6>
-      <h6 className="alert alert-dismissible alert-primary fade-in mb-4">Mining statistics can be updated once every 180 seconds</h6>
+      {/* <h6 className="alert alert-dismissible alert-primary fade-in mb-4">Mining statistics can be updated once every 180 seconds</h6> */}
       <h1 className="text-light mb-2" id="title">Qubic.Commando.sh - Mining stats for Qubic.Solutions pool</h1>
-      <h6 className="text-light mb-4"><span className="text-primary">Created with love for the Qubic.Solutions community ;)</span></h6>
+      <h6 className="text-light mb-4"><span className="text-primary">Happy mining, and may the hash-force be with you ;)</span></h6>
 
       <div className="col-md-12 d-flex justify-content-between">
         <div className="form-check form-switch fade-in mb-0">
@@ -177,7 +177,7 @@ function App() {
             checked={hideMinerAddress}
             onChange={() => setHideMinerAddress(!hideMinerAddress)}
           />
-          <label className="form-check-label" htmlFor="toggleSwitchMinerAddress" style={{ fontSize: '0.8rem', fontWeight: 'normal' }}>Hide Address</label>
+          <label className="form-check-label" htmlFor="toggleSwitchMinerAddress form-check-label-small">Hide Address</label>
         </div>
         <div className="form-check form-switch fade-in mb-2">
           <input
@@ -187,22 +187,21 @@ function App() {
             checked={rememberAddress}
             onChange={() => setRememberAddress(!rememberAddress)}
           />
-          <label className="form-check-label" htmlFor="toggleSwitchRememberAddress" style={{ fontSize: '0.8rem', fontWeight: 'normal' }}>Remember Address</label>
+          <label className="form-check-label" htmlFor="toggleSwitchRememberAddress form-check-label-small">Remember Address</label>
         </div>
       </div>
 
-      <form onSubmit={handleMinerIdSubmit} className="fade-in mb-4">
+      <form onSubmit={handleMinerIdSubmit} className="fade-in mb-1">
         <div className="input-group mb-3">
           <input
             type="text"
-            className="form-control form-control-lg"
+            className={`form-control form-control-lg ${hideMinerAddress ? 'filter-blur' : ''}`}
             value={minerId}
             onChange={(e) => setMinerId(e.target.value)}
             placeholder="Enter Your Qubic Wallet Address"
-            style={{ filter: hideMinerAddress ? 'blur(4px)' : 'none' }}
           />
-          <button className="btn btn-secondary" type="submit">Load Miner Stats</button>
-        </div>
+        <button className="btn btn-secondary" type="submit">Load Miner Stats</button>
+      </div>
       </form>
 
       {error && (
@@ -210,14 +209,16 @@ function App() {
           {error}
         </div>
       )}
-
+<h6 className="text-light mb-0 text-end">
+  <span className="text-primary">Statistics can be updated once every 180 seconds</span>
+</h6>
       {jsonData1 && (
         <>
           <h2 className="text-light fade-in">Pool Statistics</h2>
-          <p className="fade-in" style={{ color: '#6c757d', fontSize: '0.8rem', fontWeight: 'normal' }}>Data loaded at: {api1TimeStamp}</p>
+          <p className="fade-in data-timestamp">Data loaded at: {api1TimeStamp}</p>
 
           <div className="card border-light mb-5 fade-in">
-            <table className="table table-dark table-striped table-hover mb-0 w-full" style={{ tableLayout: 'fixed' }}>
+            <table className="table table-dark table-striped table-hover mb-0 w-full table-fixed">
               <thead>
                 <tr>
                   <th className="w-1/6"><span className="text-secondary">Epoch</span></th>
@@ -245,7 +246,7 @@ function App() {
 
       {showLoading && (
         <div className="progress mb-4 fade-in">
-          <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style={{ width: '100%' }}>Loading Data ...</div>
+          <div className="progress-bar progress-bar-striped progress-bar-animated progress-bar-full-width" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Loading Data ...</div>
         </div>
       )}
 
@@ -253,36 +254,51 @@ function App() {
       {jsonData2 && (
         <>
           <h2 className="text-light fade-in">Miner Statistics</h2>
-          <p className="fade-in" style={{ color: '#6c757d', fontSize: '0.8rem', fontWeight: 'normal' }}>Data loaded at: {api2TimeStamp}</p>
+          <p className="fade-in data-timestamp">Data loaded at: {api2TimeStamp}</p>
           <div className="card border-light mb-5 fade-in">
-            <table className="table table-dark table-striped table-hover mb-0 w-full" style={{ tableLayout: 'fixed' }}>
-              <colgroup>
-                <col className="w-1/4" />
-                <col className="w-1/4" />
-                <col className="w-1/4" />
-                <col className="w-1/4" />
-              </colgroup>
+            <table className="table table-dark table-striped table-hover mb-0 w-full table-fixed">
+
               <thead>
                 <tr>
-                  <th className="w-1/4"><span className="text-secondary">Total Iteration</span></th>
-                  <th className="w-1/4"><span className="text-secondary">Total Devices</span></th>
-                  <th className="w-1/4"><span className="text-secondary">Total Shares</span></th>
-                  <th className="w-1/4"><span className="text-secondary">Total Solutions</span></th>
+                  <th className={jsonData2 && jsonData2.solutions > 0 ? 'header-wide' : 'header-narrow'}>
+                    <span className="text-secondary">Total Iteration</span>
+                  </th>
+                  <th className={jsonData2 && jsonData2.solutions > 0 ? 'header-wide' : 'header-narrow'}>
+                    <span className="text-secondary">Total Devices</span>
+                  </th>
+                  <th className={jsonData2 && jsonData2.solutions > 0 ? 'header-wide' : 'header-narrow'}>
+                    <span className="text-secondary">Total Shares</span>
+                  </th>
+                  {jsonData2 && jsonData2.solutions > 0 && (
+                    <th className="header-wide">
+                      <span className="text-secondary">Total Solutions</span>
+                    </th>
+                  )}
                 </tr>
               </thead>
+
               <tbody>
                 <tr>
-                  <td className="w-1/4">{roundToTwoDigits(jsonData2.iterrate)}<span className="text-light"> it/s</span></td>
-                  <td className="w-1/4">{jsonData2.devices}</td>
-                  <td className="w-1/4">{jsonData2.shares}</td>
-                  <td className="w-1/4">{jsonData2.solutions}</td>
+                  <td className={jsonData2 && jsonData2.solutions > 0 ? "w-1/4" : "w-1/3"}>
+                    {roundToTwoDigits(jsonData2.iterrate)}<span className="text-light"> it/s</span>
+                  </td>
+                  <td className={jsonData2 && jsonData2.solutions > 0 ? "w-1/4" : "w-1/3"}>
+                    {jsonData2.devices}
+                  </td>
+                  <td className={jsonData2 && jsonData2.solutions > 0 ? "w-1/4" : "w-1/3"}>
+                    {jsonData2.shares}
+                  </td>
+                  {jsonData2 && jsonData2.solutions > 0 && (
+                    <td className="w-1/4">{jsonData2.solutions}</td>
+                  )}
                 </tr>
               </tbody>
+
             </table>
           </div>
 
           <h2 className="text-light fade-in">Workers Statistics</h2>
-          <p className="fade-in mb-0" style={{ color: '#6c757d', fontSize: '0.8rem', fontWeight: 'normal' }}>Data loaded at: {api2TimeStamp}</p>
+          <p className="fade-in data-timestamp mb-0">Data loaded at: {api2TimeStamp}</p>
           <div className="form-check form-switch mb-2 fade-in">
             <input
               className="form-check-input"
@@ -291,10 +307,10 @@ function App() {
               checked={hideWorkerName}
               onChange={() => setHideWorkerName(!hideWorkerName)}
             />
-            <label className="form-check-label fade-in" htmlFor="toggleSwitchWorkerName" style={{ fontSize: '0.8rem', fontWeight: 'normal' }}>Hide Worker Name</label>
+            <label className="form-check-label fade-in form-check-label-small" htmlFor="toggleSwitchWorkerName">Hide Worker Name</label>
           </div>
           <div className="card border-light mb-3 fade-in">
-            <table className="table table-dark table-striped table-hover mb-0" style={{ tableLayout: 'fixed' }}>
+            <table className="table table-dark table-striped table-hover table-fixed mb-0">
               <thead>
                 <tr>
                   <th className="w-1/4" onClick={() => toggleSort('label')} title="Click here to sort">
@@ -316,8 +332,8 @@ function App() {
               </thead>
               <tbody>
                 {sortedDeviceList.map((device, index) => (
-                  <tr key={index} style={{ backgroundColor: '#133e7c' }}>
-                    <td style={{ filter: hideWorkerName ? 'blur(4px)' : 'none' }}>{device.label}</td>
+                  <tr key={index} className="table-row-background">
+                    <td className={hideWorkerName ? "filter-blur" : ""}>{device.label}</td>
                     <td>{roundToTwoDigits(device.last_iterrate)}<span className="text-light"> it/s</span></td>
                     <td>{device.shares}</td>
                     {/* <td>{device.solutions}</td> */}
@@ -331,8 +347,8 @@ function App() {
       )}
 
       <h6 class="text-light mb-4 fade-in">
-          <span class="text-primary">
-              <a href="https://discord.gg/Ben9Gny8b3" target="_blank">Code by MinerNinja</a>
+          <span class="text-primary no-underline">
+              <a href="https://discord.gg/Ben9Gny8b3" target="_blank" rel="noopener noreferrer">Code by MinerNinja</a>
           </span>
       </h6>
     </div>

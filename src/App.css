@@ -53,7 +53,40 @@ th, td {
     }
   }
   
-  .fade-in {
-    animation: fadeIn 1s ease-in-out;
-  }
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
   
+.progress-bar-full-width {
+  width: 100%;
+}
+
+.data-timestamp {
+  color: #6c757d;
+  font-size: 0.8rem;
+}
+
+.form-check-label-small {
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+
+.filter-blur {
+  filter: blur(4px);
+}
+
+.table-fixed {
+  table-layout: fixed;
+}
+
+.table-row-background {
+  background-color: #133e7c;
+}
+
+.header-wide {
+  width: 25%;
+}
+
+.header-narrow {
+  width: 33.33%;
+}
