@@ -9,16 +9,16 @@ const MinerStatistics = ({ jsonData2, api2TimeStamp, roundToTwoDigits }) => {
         <table className="table table-dark table-striped table-hover mb-0 w-full table-fixed">
           <thead>
             <tr>
-              <th className={jsonData2 && jsonData2.solutions > 0 ? 'header-wide' : 'header-narrow'}>
+              <th className={jsonData2 && jsonData2.solo.solutions > 0 ? 'header-wide' : 'header-narrow'}>
                 <span className="text-secondary">Total Iteration</span>
               </th>
-              <th className={jsonData2 && jsonData2.solutions > 0 ? 'header-wide' : 'header-narrow'}>
+              <th className={jsonData2 && jsonData2.solo.solutions > 0 ? 'header-wide' : 'header-narrow'}>
                 <span className="text-secondary">Total Devices</span>
               </th>
-              <th className={jsonData2 && jsonData2.solutions > 0 ? 'header-wide' : 'header-narrow'}>
+              <th className={jsonData2 && jsonData2.solo.solutions > 0 ? 'header-wide' : 'header-narrow'}>
                 <span className="text-secondary">Total Shares</span>
               </th>
-              {jsonData2 && jsonData2.solutions > 0 && (
+              {jsonData2 && jsonData2.solo.solutions > 0 && (
                 <th className="header-wide">
                   <span className="text-secondary">Total Solutions</span>
                 </th>
@@ -27,17 +27,17 @@ const MinerStatistics = ({ jsonData2, api2TimeStamp, roundToTwoDigits }) => {
           </thead>
           <tbody>
             <tr>
-              <td className={jsonData2 && jsonData2.solutions > 0 ? "w-1/4" : "w-1/3"}>
+              <td className={jsonData2 && jsonData2.solo.solutions > 0 ? "w-1/4" : "w-1/3"}>
                 {roundToTwoDigits(jsonData2.iterrate)}<span className="text-light"> it/s</span>
               </td>
-              <td className={jsonData2 && jsonData2.solutions > 0 ? "w-1/4" : "w-1/3"}>
+              <td className={jsonData2 && jsonData2.solo.solutions > 0 ? "w-1/4" : "w-1/3"}>
                 {jsonData2.devices}
               </td>
-              <td className={jsonData2 && jsonData2.solutions > 0 ? "w-1/4" : "w-1/3"}>
-                {jsonData2.shares}
+              <td className={jsonData2 && jsonData2.solo.solutions > 0 ? "w-1/4" : "w-1/3"}>
+                {jsonData2.pplns.shares}
               </td>
-              {jsonData2 && jsonData2.solutions > 0 && (
-                <td className="w-1/4">{jsonData2.solutions}</td>
+              {jsonData2 && jsonData2.solo.solutions > 0 && (
+                <td className="w-1/4">{jsonData2.solo.solutions}</td>
               )}
             </tr>
           </tbody>

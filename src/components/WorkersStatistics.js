@@ -1,6 +1,6 @@
 import React from 'react';
 
-const WorkersStatistics = ({ api2TimeStamp, hideWorkerName, sortedDeviceList, toggleSort, roundToTwoDigits }) => {
+const WorkersStatistics = ({ api2TimeStamp, hideWorkerName, sortedDeviceList, toggleSort, roundToTwoDigits, jsonData1 }) => {
   return (
     <>
       <h2 className="text-light fade-in">Workers Statistics</h2>

@@ -148,7 +148,7 @@ function App() {
     <div className="container mt-5 fade-in">
       <PageHeader />
 
-      <div className="col-md-12 d-flex justify-content-between">
+      <div className="col-md-12 d-flex justify-content-between ">
         <ToggleSwitch
           id="toggleSwitchMinerAddress"
           checked={hideMinerAddress}
@@ -175,7 +175,7 @@ function App() {
           {error}
         </div>
       )}
-      <h6 className="text-light mb-0 text-end">
+      <h6 className="text-light mb-4 text-end">
         <span className="text-primary">Statistics can be updated once every 180 seconds</span>
       </h6>
       

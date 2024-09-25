@@ -90,3 +90,13 @@ th, td {
 .header-narrow {
   width: 33.33%;
 }
+
+.two-side-page {
+  display: flex;
+  justify-content: space-between;
+  max-width: auto;
+  margin: 0 auto;
+}
+.left, .right {
+  width: 48%;
+}

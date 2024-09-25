@@ -10,7 +10,7 @@ const ToggleSwitch = ({ id, checked, onChange, label }) => {
         checked={checked}
         onChange={onChange}
       />
-      <label className="form-check-label" htmlFor={id}>{label}</label>
+      <label className="form-check-label-small" htmlFor={id}>{label}</label>
     </div>
   );
 };
