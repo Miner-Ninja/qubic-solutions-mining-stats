@@ -12,13 +12,14 @@ const PageHeader = () => {
         <meta name="keywords" content="mining stats, Qubic Solutions, pool statistics, epoch, pool iteration, devices, solutions" />
         <meta name="author" content="MinerNinja" />
       </Helmet>
-        <div className="alert alert-dismissible alert-primary mt-5 fade-in">
+        <div className="alert alert-primary mt-5 fade-in">
           <h6 className="fade-in mb-1">
-            <span className="fade-in">Feel free to donate for webpage development and support: <br/>Qubic wallet: AAIGFEWABOFCNDCFJUOMMAYMVNUCLQWMYQQIDYYFSFQMJTRAIXJEDTTEJHDI</span>
+            <span className="fade-in">We need Your donnation to make this project possible.<br/>Feel free to donate for webpage development and support: <br/>Qubic wallet: PONNUCBRSDOVYFIKITWQMMRQTFNBGNDFAEEDHQCSTEAEXTXEALVLLYQADMJA</span>
          </h6>
         </div>
-      <h1 className="text-light mb-2" id="title">Qubic.Commando.sh - Mining stats for Qubic.Solutions pool</h1>
+      <h1 className="text-light mb-2 " id="title"><span className="cyberpunk-glow-2">Qubic.Commando.sh</span> - Mining stats for Qubic.Solutions pool</h1>
       <h6 className="text-light mb-4"><span>Happy mining, and may the hash-force be with you ;)</span></h6>
+
     </>
   );
 };

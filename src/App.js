@@ -159,7 +159,7 @@ function App() {
           id="toggleSwitchRememberAddress"
           checked={rememberAddress}
           onChange={() => setRememberAddress(prev => !prev)}
-          label="Remember Address"
+          label="Save Address"
         />
       </div>
 

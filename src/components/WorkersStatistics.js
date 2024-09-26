@@ -1,10 +1,10 @@
 import React from 'react';
 
-const WorkersStatistics = ({ api2TimeStamp, hideWorkerName, sortedDeviceList, toggleSort, roundToTwoDigits, jsonData1 }) => {
+const WorkersStatistics = ({ api2TimeStamp, hideWorkerName, sortedDeviceList, toggleSort, roundToTwoDigits,  }) => {
   return (
     <>
       <h2 className="text-light fade-in">Workers Statistics</h2>
-      <p className="fade-in data-timestamp mb-0">Data loaded at: {api2TimeStamp}</p>
+      <p className="fade-in data-timestamp mb-3">Data loaded at: {api2TimeStamp}</p>
       <div className="card border-light mb-3 fade-in">
         <table className="table table-dark table-striped table-hover table-fixed mb-0">
           <thead>

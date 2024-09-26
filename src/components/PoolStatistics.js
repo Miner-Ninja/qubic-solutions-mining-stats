@@ -9,7 +9,7 @@ const PoolStatistics = ({ jsonData1, api1TimeStamp, roundToTwoDigits }) => {
           <p className="data-timestamp">Data loaded at: {api1TimeStamp}</p>
         </div>
         <div className="right-column text-right">
-          <h2 className="text-light" align="right">EP-{jsonData1.epoch}</h2>
+          <h2 className="text-light cyberpunk-glow" align="right">EP-{jsonData1.epoch}</h2>
           <h6 className="text-light" align="right">Minimal miner version: <b>{jsonData1.min_miner_version}</b></h6>
         </div>
       </div>

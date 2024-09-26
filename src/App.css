@@ -100,3 +100,35 @@ th, td {
 .left, .right {
   width: 48%;
 }
+
+@keyframes cyberpunk-glow {
+  0% {
+    text-shadow: 0 0 2px #00ffff3b, 0 0 5px #00ffff69, 0 0 10px #00ffff9b, 0 0 15px #00ffffda;
+  }
+  50% {
+    text-shadow: 0 0 2px #36008280, 0 0 5px #360082aa, 0 0 10px #360082d1, 0 0 15px #360082;
+  }
+  100% {
+    text-shadow: 0 0 2px #00ffff3b, 0 0 5px #00ffff69, 0 0 10px #00ffff9b, 0 0 15px #00ffffda;
+  }
+}
+
+.cyberpunk-glow {
+  animation: cyberpunk-glow 5s ease-in-out infinite alternate;
+}
+
+@keyframes cyberpunk-glow-2 {
+  0% {
+    text-shadow: 0 0 1px #00ffff3b, 0 0 3px #00ffff69, 0 0 6px #00ffff9b, 0 0 9px #00ffffda;
+  }
+  50% {
+    text-shadow: 0 0 1px #36008280, 0 0 3px #360082aa, 0 0 6px #360082d1, 0 0 9px #360082;
+  }
+  100% {
+    text-shadow: 0 0 1px #00ffff54, 0 0 3px #00ffff81, 0 0 6px #00ffffbc, 0 0 9px #00ffffea;
+  }
+}
+
+.cyberpunk-glow-2 {
+  animation: cyberpunk-glow-2 7s ease-in-out infinite alternate;
+}

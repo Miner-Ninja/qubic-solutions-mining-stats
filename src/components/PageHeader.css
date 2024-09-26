@@ -1,0 +1,26 @@
+@keyframes cyberpunk-glow {
+  0% {
+    text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff;
+  }
+  50% {
+    text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff;
+  }
+  100% {
+    text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff;
+  }
+}
+
+.cyberpunk-glow {
+  color: #00ffff;
+  font-size: 3rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  animation: cyberpunk-glow 2s ease-in-out infinite alternate;
+}
+
+.page-header {
+  text-align: center;
+  padding: 20px 0;
+  background-color: #1a1a2e;
+}

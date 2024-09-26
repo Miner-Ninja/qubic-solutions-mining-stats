@@ -11,7 +11,7 @@ const SubmitForm = ({ minerId, setMinerId, hideMinerAddress, handleMinerIdSubmit
           onChange={(e) => setMinerId(e.target.value)}
           placeholder="Enter Your Qubic Wallet Address"
         />
-        <button className="btn btn-secondary" type="submit">Load Miner Stats</button>
+        <button className="btn btn-secondary" type="submit">Load Stats</button>
       </div>
     </form>
   );
