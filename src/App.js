@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import "bootswatch/dist/vapor/bootstrap.min.css";
 import './App.css';
+import HoneycombBackground from './components/HoneycombBackground';
 import PoolStatistics from './components/PoolStatistics';
 import MinerStatistics from './components/MinerStatistics';
 import WorkersStatistics from './components/WorkersStatistics';
@@ -145,83 +146,86 @@ function App() {
   }, []);
 
   return (
-    <div className="container mt-5 fade-in">
-      <PageHeader />
+    <>
+      <HoneycombBackground />
+      <div className="container mt-5 fade-in">
+        <PageHeader />
 
-      <div className="col-md-12 d-flex justify-content-between ">
-        <ToggleSwitch
-          id="toggleSwitchMinerAddress"
-          checked={hideMinerAddress}
-          onChange={() => setHideMinerAddress(prev => !prev)}
-          label="Hide Address"
-        />
-        <ToggleSwitch
-          id="toggleSwitchRememberAddress"
-          checked={rememberAddress}
-          onChange={() => setRememberAddress(prev => !prev)}
-          label="Save Address"
-        />
-      </div>
-
-      <SubmitForm
-        minerId={minerId}
-        setMinerId={handleMinerIdChange}
-        hideMinerAddress={hideMinerAddress}
-        handleMinerIdSubmit={handleMinerIdSubmit}
-      />
-
-      {error && (
-        <div className="alert alert-danger fade-in" role="alert">
-          {error}
-        </div>
-      )}
-      <h6 className="text-light mb-4 text-end">
-        <span className="text-primary">Statistics can be updated once every 180 seconds</span>
-      </h6>
-      
-      {jsonData1 && (
-        <PoolStatistics 
-          jsonData1={jsonData1} 
-          api1TimeStamp={api1TimeStamp} 
-          roundToTwoDigits={roundToTwoDigits} 
-        />
-      )}
-
-      {(loadingApi1 || loadingApi2) && (
-        <div className="progress mb-4 fade-in">
-          <div className="progress-bar progress-bar-striped progress-bar-animated progress-bar-full-width" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Loading Data ...</div>
-        </div>
-      )}
-
-      {jsonData2 && (
-        <>
-          <MinerStatistics 
-            jsonData2={jsonData2} 
-            api2TimeStamp={api2TimeStamp} 
-            roundToTwoDigits={roundToTwoDigits} 
+        <div className="col-md-12 d-flex justify-content-between ">
+          <ToggleSwitch
+            id="toggleSwitchMinerAddress"
+            checked={hideMinerAddress}
+            onChange={() => setHideMinerAddress(prev => !prev)}
+            label="Hide Address"
           />
           <ToggleSwitch
-            id="toggleSwitchWorkerName"
-            checked={hideWorkerName}
-            onChange={() => setHideWorkerName(prev => !prev)}
-            label="Hide Worker Name"
+            id="toggleSwitchRememberAddress"
+            checked={rememberAddress}
+            onChange={() => setRememberAddress(prev => !prev)}
+            label="Save Address"
           />
-          <WorkersStatistics 
-            api2TimeStamp={api2TimeStamp}
-            hideWorkerName={hideWorkerName}
-            sortedDeviceList={sortedDeviceList}
-            toggleSort={toggleSort}
-            roundToTwoDigits={roundToTwoDigits}
-          />
-        </>
-      )}
+        </div>
 
-      <h6 className="text-light mb-4 fade-in">
+        <SubmitForm
+          minerId={minerId}
+          setMinerId={handleMinerIdChange}
+          hideMinerAddress={hideMinerAddress}
+          handleMinerIdSubmit={handleMinerIdSubmit}
+        />
+
+        {error && (
+          <div className="alert alert-danger fade-in" role="alert">
+            {error}
+          </div>
+        )}
+        <h6 className="text-light mb-4 text-end">
+          <span className="text-primary">Statistics can be updated once every 180 seconds</span>
+        </h6>
+        
+        {jsonData1 && (
+          <PoolStatistics 
+            jsonData1={jsonData1} 
+            api1TimeStamp={api1TimeStamp} 
+            roundToTwoDigits={roundToTwoDigits} 
+          />
+        )}
+
+        {(loadingApi1 || loadingApi2) && (
+          <div className="progress mb-4 fade-in">
+            <div className="progress-bar progress-bar-striped progress-bar-animated progress-bar-full-width" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Loading Data ...</div>
+          </div>
+        )}
+
+        {jsonData2 && (
+          <>
+            <MinerStatistics 
+              jsonData2={jsonData2} 
+              api2TimeStamp={api2TimeStamp} 
+              roundToTwoDigits={roundToTwoDigits} 
+            />
+            <ToggleSwitch
+              id="toggleSwitchWorkerName"
+              checked={hideWorkerName}
+              onChange={() => setHideWorkerName(prev => !prev)}
+              label="Hide Worker Name"
+            />
+            <WorkersStatistics 
+              api2TimeStamp={api2TimeStamp}
+              hideWorkerName={hideWorkerName}
+              sortedDeviceList={sortedDeviceList}
+              toggleSort={toggleSort}
+              roundToTwoDigits={roundToTwoDigits}
+            />
+          </>
+        )}
+
+        <h6 className="text-light mb-4 fade-in">
           <span className="text-primary no-underline">
-              <a href="https://discord.gg/Ben9Gny8b3" target="_blank" rel="noopener noreferrer">Code by MinerNinja</a>
+            <a href="https://discord.gg/Ben9Gny8b3" target="_blank" rel="noopener noreferrer">Code by MinerNinja</a>
           </span>
-      </h6>
-    </div>
+        </h6>
+      </div>
+    </>
   );
 }
 

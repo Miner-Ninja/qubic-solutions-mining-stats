@@ -19,6 +19,10 @@ const PageHeader = () => {
         </div>
       <h1 className="text-light mb-2 " id="title"><span className="cyberpunk-glow-2">Qubic.Commando.sh</span> - Mining stats for Qubic.Solutions pool</h1>
       <h6 className="text-light mb-4"><span>Happy mining, and may the hash-force be with you ;)</span></h6>
+      
+      {/* <button type="button" class="btn btn-outline-secondary mb-3 m-1">Mining stats</button>
+      <button type="button" class="btn btn-outline-secondary mb-3 m-1">Payouts stats</button>
+      <button type="button" class="btn btn-outline-secondary mb-3 m-1">Top Donators</button> */}
 
     </>
   );
