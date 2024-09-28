@@ -1,57 +1,113 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-const HoneycombBackground = () => {
-  const honeycombRef = useRef(null);
+const HexagonBackground = ({
+  hexagonWidth = 45,
+  hexagonHeight = 50,
+  hexagonColor = '#240d45',
+  fadeInSpeed = 1.5,
+  fadeOutSpeed = 1.5
+}) => {
+  const svgRef = useRef(null);
+  const [hexagons, setHexagons] = useState([]);
 
   useEffect(() => {
-    const cellWidth = 45;
-    const cellHeight = 50;
-    const rowHeight = cellHeight * 3/4;
+    const rowHeight = hexagonHeight * 3/4;
 
-    const createHoneycomb = () => {
-      const honeycomb = honeycombRef.current;
-      if (!honeycomb) return;
+    const createHexagonGrid = () => {
+      const svg = svgRef.current;
+      if (!svg) return;
 
-      const columns = Math.ceil(window.innerWidth / cellWidth) + 1;
+      const columns = Math.ceil(window.innerWidth / hexagonWidth) + 1;
       const rows = Math.ceil(window.innerHeight / rowHeight) + 1;
 
-      honeycomb.innerHTML = '';
+      const newHexagons = [];
 
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < columns; col++) {
-          const cell = document.createElement('div');
-          cell.classList.add('honeycomb-cell');
-          cell.style.left = `${col * cellWidth + (row % 2) * (cellWidth / 2)}px`;
-          cell.style.top = `${row * rowHeight}px`;
-          cell.style.opacity = '0';
-          honeycomb.appendChild(cell);
+          const x = col * hexagonWidth + (row % 2) * (hexagonWidth / 2);
+          const y = row * rowHeight;
+          newHexagons.push({ id: `hexagon-${row}-${col}`, x, y });
         }
       }
+
+      setHexagons(newHexagons);
     };
 
-    const animateHoneycomb = () => {
-      const cells = honeycombRef.current.querySelectorAll('.honeycomb-cell');
-      cells.forEach(cell => {
-        if (Math.random() < 0.01) {
-          cell.style.opacity = '1';
+    createHexagonGrid();
+    window.addEventListener('resize', createHexagonGrid);
+
+    return () => {
+      window.removeEventListener('resize', createHexagonGrid);
+    };
+  }, [hexagonWidth, hexagonHeight]);
+
+  useEffect(() => {
+    const animateHexagons = () => {
+      hexagons.forEach(hexagon => {
+        const element = document.getElementById(hexagon.id);
+        if (element && Math.random() < 0.01) {
+          element.style.transition = `opacity ${fadeInSpeed}s ease-in-out`;
+          element.style.opacity = '1';
           setTimeout(() => {
-            cell.style.opacity = '0';
+            element.style.transition = `opacity ${fadeOutSpeed}s ease-in-out`;
+            element.style.opacity = '0';
           }, 2000);
         }
       });
     };
 
-    createHoneycomb();
-    window.addEventListener('resize', createHoneycomb);
-    const animationInterval = setInterval(animateHoneycomb, 50);
+    const animationInterval = setInterval(animateHexagons, 50);
 
     return () => {
-      window.removeEventListener('resize', createHoneycomb);
       clearInterval(animationInterval);
     };
-  }, []);
+  }, [hexagons, fadeInSpeed, fadeOutSpeed]);
 
-  return <div ref={honeycombRef} className="honeycomb" />;
+  // Calculate points for the hexagon polygon
+  const halfWidth = hexagonWidth / 2;
+  const quarterHeight = hexagonHeight / 4;
+  const points = `
+    ${halfWidth},0
+    ${hexagonWidth},${quarterHeight}
+    ${hexagonWidth},${3*quarterHeight}
+    ${halfWidth},${hexagonHeight}
+    0,${3*quarterHeight}
+    0,${quarterHeight}
+  `;
+
+  return (
+    <svg 
+      ref={svgRef} 
+      style={{ 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        width: '100%', 
+        height: '100%', 
+        zIndex: -1 
+      }}
+    >
+      <defs>
+        <polygon 
+          id="hexagon" 
+          points={points}
+          fill={hexagonColor}
+        />
+      </defs>
+      {hexagons.map(hexagon => (
+        <use 
+          key={hexagon.id}
+          id={hexagon.id}
+          href="#hexagon" 
+          x={hexagon.x} 
+          y={hexagon.y}
+          style={{
+            opacity: 0,
+          }}
+        />
+      ))}
+    </svg>
+  );
 };
 
-export default HoneycombBackground;
+export default HexagonBackground;
