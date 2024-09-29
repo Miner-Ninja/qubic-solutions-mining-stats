@@ -3,9 +3,11 @@ import React, { useEffect, useRef, useState } from 'react';
 const HexagonBackground = ({
   hexagonWidth = 45,
   hexagonHeight = 50,
-  hexagonColor = '#240d45',
-  fadeInSpeed = 1.5,
-  fadeOutSpeed = 1.5
+  hexagonColor = '#230d42',
+  strokeColor = '#2f1a4d',
+  strokeWidth = 2,
+  fadeInSpeed = 1.0,
+  fadeOutSpeed = 1.0
 }) => {
   const svgRef = useRef(null);
   const [hexagons, setHexagons] = useState([]);
@@ -51,12 +53,12 @@ const HexagonBackground = ({
           setTimeout(() => {
             element.style.transition = `opacity ${fadeOutSpeed}s ease-in-out`;
             element.style.opacity = '0';
-          }, 2000);
+          }, 4000);
         }
       });
     };
 
-    const animationInterval = setInterval(animateHexagons, 50);
+    const animationInterval = setInterval(animateHexagons, 200);
 
     return () => {
       clearInterval(animationInterval);
@@ -92,6 +94,8 @@ const HexagonBackground = ({
           id="hexagon" 
           points={points}
           fill={hexagonColor}
+          stroke={strokeColor}
+          strokeWidth={strokeWidth}
         />
       </defs>
       {hexagons.map(hexagon => (
